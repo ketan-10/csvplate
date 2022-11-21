@@ -54,14 +54,18 @@ func main() {
 		}
 		prefix := outputFileName[:lastIdx]
 		sufix := outputFileName[lastIdx:]
-		fileIdx := 0
+		fileIdx := 1
 		for i := 0; i < len(csvdata); i += split {
 
 			file, err := os.Create(fmt.Sprintf("%s-%d%s",prefix, fileIdx, sufix))
 			if err != nil {
 				panic(err)
 			}
-			t.Execute(file, csvdata[i : i+split])
+			if i+split >= len(csvdata) {
+				t.Execute(file, csvdata[i:])
+			}else {
+				t.Execute(file, csvdata[i : i+split])
+			}
 			fileIdx++
 		}
 	}
